@@ -7,11 +7,15 @@ class DowloadDataBinance:
     def __init__(self, save_path):
         self.save_path = save_path
     
-    def download_trades_binance(self, symbol='BTCUSDT', hours=12, max_trades=100000) -> pd.DataFrame:
+    def download_trades_binance(
+        self, 
+        symbol='BTCUSDT', 
+        hours=12, 
+        max_trades=100000) -> pd.DataFrame:
         """
         Descarga trades individuales de Binance
         """
-        print(f"🔄 Descargando trades de {symbol}...")
+        print(f"Descargando trades de {symbol}...")
         
         url = "https://api.binance.com/api/v3/aggTrades"
         
@@ -35,14 +39,14 @@ class DowloadDataBinance:
                 response = requests.get(url, params=params)
                 
                 if response.status_code == 429:
-                    print("⏸️  Rate limit, esperando 5s...")
+                    print("⏸ Rate limit, esperando 5s...")
                     time.sleep(5)
                     continue
                 
                 data = response.json()
                 
                 if isinstance(data, dict) and 'code' in data:
-                    print(f"❌ Error API: {data.get('msg')}")
+                    print(f"X Error API: {data.get('msg')}")
                     break
                 
                 if not data:
@@ -51,19 +55,19 @@ class DowloadDataBinance:
                 all_trades.extend(data)
                 current_time = data[-1]['T'] + 1
                 
-                print(f"📊 Trades: {len(all_trades):,} | Iter: {iterations+1}", end='\r')
+                print(f"Trades: {len(all_trades):,} | Iter: {iterations+1}", end='\r')
                 
                 iterations += 1
                 time.sleep(0.15)
                 
             except Exception as e:
-                print(f"\n❌ Error: {e}")
+                print(f"\n Error: {e}")
                 break
         
         print(f"\n✓ Descargados: {len(all_trades):,} trades")
         
         if len(all_trades) < 100:
-            print("⚠️  Muy pocos trades descargados")
+            print("¡ Muy pocos trades descargados ! ")
             return None
         
         # Crear DataFrame
@@ -79,13 +83,13 @@ class DowloadDataBinance:
         # Guardar a CSV
         filename = f"{self.save_path}{symbol}_trades_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
         df.to_csv(filename, index=False)
-        print(f"💾 Guardado en: {filename}")
+        print(f"Guardado en: {filename}")
         
         return df
     
     def show_info(self, trades: pd.DataFrame):
         print("\n" + "="*60)
-        print("📊 INFORMACIÓN DE LOS DATOS")
+        print("INFORMACIÓN DE LOS DATOS")
         print("="*60)
         print(f"Total trades: {len(trades):,}")
         print(f"Período: {trades['timestamp'].min()} a {trades['timestamp'].max()}")
