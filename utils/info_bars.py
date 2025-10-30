@@ -41,7 +41,7 @@ class InfoBars:
 
         return pd.DataFrame(bars)
     
-    def get_dibs(self, df: pd.DataFrame, exp_lambda=0.9, init_exp_T=1500) -> pd.DataFrame:
+    def get_dibs(self, df: pd.DataFrame, exp_lambda=0.9, init_exp_T=1600) -> pd.DataFrame:
         """
         Dollar Imbalance Bars (DIBs)
         Formula: E_0[θ_T] = E_0[T](2v+ - E_0[v_t])
@@ -108,7 +108,7 @@ class InfoBars:
         
         return pd.DataFrame(bars)
     
-    def get_vibs(self, df: pd.DataFrame, exp_lambda=0.9, init_exp_T=1500) -> pd.DataFrame:
+    def get_vibs(self, df: pd.DataFrame, exp_lambda=0.9, init_exp_T=1600) -> pd.DataFrame:
         """
         Volume Imbalance Bars (VIBs)
         Formula: E_0[θ_T] = E_0[T](2v+ - E_0[v_t])

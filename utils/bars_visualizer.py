@@ -68,11 +68,22 @@ class BarsVisualizer:
     def candle_chart(self, bars_df: pd.DataFrame, bar_type: str):
         """Grafica velas para las barras"""
         df_plot = bars_df.copy()
-        df_plot.set_index('close_time', inplace=True)
-        df_plot.index = pd.to_datetime(df_plot.index)
+        
+        # Si close_time no es el índice, establecerlo
+        if 'close_time' in df_plot.columns:
+            df_plot.set_index('close_time', inplace=True)
+        
+        # Asegurar que el índice sea datetime
+        if not isinstance(df_plot.index, pd.DatetimeIndex):
+            df_plot.index = pd.to_datetime(df_plot.index)
+        
+        # Verificar que tenemos las columnas necesarias
+        required_cols = ['open', 'high', 'low', 'close', 'volume']
+        if not all(col in df_plot.columns for col in required_cols):
+            raise ValueError(f"DataFrame must contain columns: {required_cols}")
         
         mpf.plot(
-            df_plot[['open', 'high', 'low', 'close', 'volume']],
+            df_plot[required_cols],
             type='candle',
             style='charles',
             volume=True,
