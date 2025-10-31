@@ -1,7 +1,8 @@
 import pandas as pd 
 import numpy as np 
 
-from utils.base_bars import BaseBars as bb
+from utils.bars.base_bars import BaseBars as bb
+
 class InfoBars:
 
     def __init__(self, save_path):
